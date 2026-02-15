@@ -1,4 +1,3 @@
 # Text Classification API
 
-A sentiment analysis API for product reviews that demonstrates production-grade engineering practices.  
-This API will classify customer reviews as positive, negative, or neutral, with proper error handling, monitoring, caching, and deployment infrastructure.
+A sentiment analysis API that analyzes comments from Instagram Reels or YouTube videos, providing real-time insights into audience sentiment, toxicity detection, and engagement metrics.
