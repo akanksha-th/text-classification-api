@@ -50,9 +50,9 @@ class YouTubeService:
                 if not next_page_token:
                     break
 
-            comments_df = pd.DataFrame(comments, columns=["author", "published_at", "updated_at", "like_count", "text"])
-            os.makedirs("src/models/data", exist_ok=True)
-            comments_df.to_csv("src/models/data/comments.csv", index=False, encoding="utf-8")
+            # comments_df = pd.DataFrame(comments, columns=["author", "published_at", "updated_at", "like_count", "text"])
+            # os.makedirs("src/models/data", exist_ok=True)
+            # comments_df.to_csv("src/models/data/comments.csv", index=False, encoding="utf-8")
                 
             return {
                 "video_id": video_id,
