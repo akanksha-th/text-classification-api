@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # Model Settings
     SENTIMENT_MODEL: str = "cardiffnlp/twitter-roberta-base-sentiment-latest"
     MAX_LENGTH: int = 512
-    BATCH_SIZE: int = 0
+    BATCH_SIZE: int = 32
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379"

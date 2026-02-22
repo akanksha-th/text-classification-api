@@ -1,6 +1,8 @@
 from transformers import pipeline
-import onnxruntime as ort
+from src.core.config import get_settings
 from typing import Dict
+
+settings = get_settings()
 
 
 class SentimentAnalyzer:
@@ -12,7 +14,7 @@ class SentimentAnalyzer:
             "sentiment-analysis",
             model="cardiffnlp/twitter-roberta-base-sentiment-latest",
             device=-1,   # CPU
-            batch_size=32,
+            batch_size=settings.BATCH_SIZE,
             truncation=True,  
             max_length=self.MAX_LENGTH
         )

@@ -23,9 +23,9 @@ async def rate_limiter(request: Request):
     key = f"rate_limit:{client_ip}:{current_minute}"
 
     # increment counter and set TTL
-    current_count = cache_service.redis_server.incr(key)
+    current_count = await cache_service.redis_server.incr(key)
     if current_count == 1:
-        cache_service.redis_server.expire(key, 60)
+        await cache_service.redis_server.expire(key, 60)
 
     # check limit
     limit = settings.RATE_LIMIT_PER_MINUTE

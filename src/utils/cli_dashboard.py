@@ -223,7 +223,7 @@ def main():
 
     # check API health
     console.print("Checking API connection...", end=" ")
-    if check_api_health:
+    if check_api_health():
         console.print("[bold green] Connected [/bold green]")
     else:
         console.print("[red] API not reachable[/red]")

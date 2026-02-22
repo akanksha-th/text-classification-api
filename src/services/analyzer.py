@@ -1,6 +1,7 @@
 from src.models.sentiment import SentimentAnalyzer
 from src.models.preprocessing import TextProcessor
 from typing import List, Dict
+import asyncio
 import time
 
 class AnalyzerService:
@@ -9,7 +10,7 @@ class AnalyzerService:
         self.preprocessor = TextProcessor()
         self.analyzer = SentimentAnalyzer()
 
-    def analyze_comments(self, video_id: str, comments: List[Dict]) -> List[Dict]:
+    async def analyze_comments(self, video_id: str, comments: List[Dict]) -> Dict:
         """clean → analyze → aggregate"""
         start_time = time.time()
         
@@ -28,7 +29,9 @@ class AnalyzerService:
                 valid_indices.append(i)
                 
         if valid_texts:
-            sentiments = self.analyzer.analyze_batch(valid_texts)
+            sentiments = await asyncio.to_thread(
+                self.analyzer.analyze_batch, valid_texts
+            )
         else:
             sentiments = []
 

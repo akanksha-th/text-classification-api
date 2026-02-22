@@ -4,7 +4,7 @@ from typing import Optional
 
 class AnalyzeRequest(BaseModel):
     video_url: str
-    max_comments: Optional[int] = None
+    max_comments: Optional[int] = 1000
     
     @field_validator("video_url")
     @classmethod
@@ -23,5 +23,5 @@ class AnalyzeRequest(BaseModel):
             if v < 1:
                 raise ValueError('max_comments must be at least 1')
             if v > 50000:
-                raise ValueError('max_comments cannot exceed 5000')
+                raise ValueError('max_comments cannot exceed 50000')
         return v

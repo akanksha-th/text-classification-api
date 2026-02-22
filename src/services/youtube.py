@@ -1,7 +1,6 @@
 import googleapiclient.discovery as discovery
 import googleapiclient.errors as errors
-from src.utils.validators import get_videoId
-import pandas as pd, os
+import asyncio
 from src.core.config import get_settings
 
 
@@ -15,7 +14,16 @@ class YouTubeService:
             developerKey=settings.YOUTUBE_API_KEY
         )
 
-    def get_comments(self, video_id: str, max_results: int) -> dict:
+    async def get_comments(self, video_id: str, max_results: int) -> dict:
+        """Fetch comments asynchronously by offloading blocking I/O to a thread pool."""
+        return await asyncio.to_thread(
+            self._fetch_comments_async,
+            video_id,
+            max_results
+        )
+
+    def _fetch_comments_async(self, video_id: str, max_results: int) -> dict:
+        """Synchronous implementation - runs inside a thread via asyncio.to_thread."""
         comments = []
         next_page_token = None
         total_fetched = 0

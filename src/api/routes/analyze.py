@@ -14,7 +14,7 @@ analyzer_service = AnalyzerService()
 cache_service = CacheService()
 
 @router.post("/analyze", response_model=AnalysisResponse, dependencies=[Depends(rate_limiter)])
-def analyze_url(request: AnalyzeRequest):
+async def analyze_url(request: AnalyzeRequest):
     """
     Analyze Sentiment of YouTube video comments
     """
@@ -28,7 +28,7 @@ def analyze_url(request: AnalyzeRequest):
     
     # cache_key = f"{video_id}:{request.max_comments}"
     cache_key = cache_service.generate_analysis_key(video_id, request.max_comments)
-    cached_data = cache_service.get(cache_key)
+    cached_data = await cache_service.get(cache_key)
     if cached_data:
         cached_data["cached"] = True
         cached_data["source"] = "cache"
@@ -36,7 +36,7 @@ def analyze_url(request: AnalyzeRequest):
     
     # Step 2: Fetch Comments
     try:
-        comments_data = youtube_service.get_comments(
+        comments_data = await youtube_service.get_comments(
             video_id, 
             request.max_comments
         )
@@ -49,21 +49,17 @@ def analyze_url(request: AnalyzeRequest):
     
     # Step 3: Analyze Comments
     try:
-        result = analyzer_service.analyze_comments(
+        result = await analyzer_service.analyze_comments(
             video_id=video_id,
             comments=comments_data["comments"]
         )
         result["cached"] = False
         result["source"] = "api"
-        cache_service.set(cache_key, result)
+        await cache_service.set(cache_key, result)
     except Exception as e:
         print(f"Analysis Error: {e}")
         raise HTTPException(status_code=500, detail=f"Analysis error: {str(e)}")
 
     # Step 4: Return Response
-    try:
-        return result
-    except Exception as e:
-        print(f"Schema Validation Error: {e}")
-        print(f"Result was: {result}")
-        raise HTTPException(status_code=500, detail=f"Response error: {str(e)}")
+    return result
+    
